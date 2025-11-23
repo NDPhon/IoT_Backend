@@ -4,7 +4,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import pool from "./config/db.js";
 import userController from "./controllers/userController.js";
-
+import chatbotController from "./controllers/chatbotController.js";
 dotenv.config();
 
 const app = express();
@@ -17,6 +17,7 @@ app.use(
 
 app.use(express.json());
 app.use("/api/users", userController);
+app.use("/api/chat", chatbotController);
 
 // Test route
 const PORT = process.env.BACKEND_PORT || 8000;
