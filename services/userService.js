@@ -36,11 +36,7 @@ export const register = async (username, password) => {
 export const login = async (username, password) => {
   const user = await getUserByUsername(username);
   if (!user) throw new Error("Không tìm thấy user");
-  console.log("username:", username);
-  console.log("password từ client:", password);
-  console.log("password_hashed từ DB:", user.password);
   const match = await bcrypt.compare(password, user.password);
-  console.log(match);
   if (!match) throw new Error("Mật khẩu không khớp");
 
   // Tạo JWT

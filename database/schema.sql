@@ -8,3 +8,21 @@ CREATE TABLE users (
 );
 
 select * from users
+
+CREATE OR REPLACE FUNCTION fnc_login_user(
+    p_username VARCHAR,
+    p_password_hashed TEXT
+)
+RETURNS TABLE(
+    user_id INT,
+    username VARCHAR
+) AS $$
+BEGIN
+    RETURN QUERY
+    SELECT user_id, username
+    FROM users
+    WHERE username = p_username
+      AND password_hashed = p_password_hashed;
+    
+END;
+$$ LANGUAGE plpgsql;

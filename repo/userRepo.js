@@ -4,9 +4,7 @@ import { User } from "../models/user.js";
 // Tạo user mới
 export const registerUser = async (username, password) => {
   const query = `
-      INSERT INTO users (username, password_hashed)
-      VALUES ($1, $2)
-      RETURNING user_id, username, password_hashed;
+      SELECT * FROM fnc_register_user($1, $2);
   `;
   const values = [username, password];
   const res = await pool.query(query, values);
