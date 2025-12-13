@@ -69,7 +69,8 @@ CREATE OR REPLACE FUNCTION fnc_insert_sensor_data(
     _do_am_dat NUMERIC,
     _muc_nuoc NUMERIC,
     _anh_sang NUMERIC,
-    _user_id INT
+    _user_id INT,
+	_created_at TIMESTAMPTZ
 )
 RETURNS VOID AS $$
 BEGIN
@@ -88,7 +89,7 @@ BEGIN
         _muc_nuoc,
         _anh_sang,
         _user_id,
-		NOW() AT TIME ZONE 'Asia/Ho_Chi_Minh'
+		_created_at
     );
 END;
 $$ LANGUAGE plpgsql;
@@ -293,7 +294,7 @@ END IF;
     WHERE user_id = p_user_id;
 END;
 $$;
-
+drop function fnc_update_pump_status
 CREATE OR REPLACE FUNCTION fnc_update_pump_status(
     p_user_id INT,
     p_pump_status VARCHAR
@@ -314,10 +315,7 @@ BEGIN
     FROM device_control
     WHERE user_id = p_user_id;
 
-    -- Nếu không phải manual thì báo lỗi
-    IF v_mode <> 'MANUAL' THEN
-        RAISE EXCEPTION 'Pump chỉ được điều khiển khi chế độ đang là MANUAL. Hiện tại mode = %', v_mode;
-    END IF;
+
 
     -- Cập nhật pump
     UPDATE device_control

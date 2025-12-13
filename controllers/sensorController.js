@@ -4,8 +4,25 @@ import {
   fetchCurrentSensorDataByUserIdService,
 } from "../services/sensorService.js";
 import express from "express";
+import { getGroup7Data } from "../cli/subscribe.js";
 import { authenticate } from "../middlewares/auth.js";
+
 const router = express.Router();
+
+router.get("/group7", authenticate, (req, res) => {
+  const payload = getGroup7Data();
+
+  if (!payload) {
+    return res.status(404).json({
+      message: "Chưa có dữ liệu từ ESP32",
+    });
+  }
+
+  res.json({
+    message: "Lấy payload thành công",
+    data: payload,
+  });
+});
 
 router.post("/", authenticate, async (req, res) => {
   try {
