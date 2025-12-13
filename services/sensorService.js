@@ -10,7 +10,8 @@ export const addSensorDataService = async (
   do_am_dat,
   muc_nuoc,
   anh_sang,
-  user_id
+  user_id,
+  created_at
 ) => {
   const sensorData = await insertSensorData(
     nhiet_do,
@@ -18,7 +19,8 @@ export const addSensorDataService = async (
     do_am_dat,
     muc_nuoc,
     anh_sang,
-    user_id
+    user_id,
+    created_at
   );
   return sensorData;
 };

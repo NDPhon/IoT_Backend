@@ -7,10 +7,11 @@ export const insertSensorData = async (
   do_am_dat,
   muc_nuoc,
   anh_sang,
-  user_id
+  user_id,
+  created_at
 ) => {
   const query = `
-    SELECT * FROM fnc_insert_sensor_data($1, $2, $3, $4, $5, $6);
+    SELECT * FROM fnc_insert_sensor_data($1, $2, $3, $4, $5, $6, $7);
   `;
   const values = [
     nhiet_do,
@@ -19,6 +20,7 @@ export const insertSensorData = async (
     muc_nuoc,
     anh_sang,
     user_id,
+    created_at,
   ];
   const res = await pool.query(query, values);
   const row = res.rows[0];
@@ -29,7 +31,8 @@ export const insertSensorData = async (
     row.do_am_dat,
     row.muc_nuoc,
     row.anh_sang,
-    row.user_id
+    row.user_id,
+    row.created_at
   );
 };
 export const getSensorDataByUserId = async (user_id) => {

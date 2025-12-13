@@ -2,11 +2,13 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
-import pool from "./config/db.js";
 import userController from "./controllers/userController.js";
 import chatbotController from "./controllers/chatbotController.js";
 import sensorController from "./controllers/sensorController.js";
 import historyController from "./controllers/historyController.js";
+import deviceController from "./controllers/deviceController.js";
+import systemController from "./controllers/systemController.js";
+
 dotenv.config();
 
 const app = express();
@@ -22,6 +24,8 @@ app.use("/api/users", userController);
 app.use("/api/chat", chatbotController);
 app.use("/api/sensors", sensorController);
 app.use("/api/history", historyController);
+app.use("/api/device", deviceController);
+app.use("/api/system", systemController);
 
 // Test route
 const PORT = process.env.BACKEND_PORT || 8000;

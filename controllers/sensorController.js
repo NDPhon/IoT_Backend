@@ -9,8 +9,14 @@ const router = express.Router();
 
 router.post("/", authenticate, async (req, res) => {
   try {
-    const { nhiet_do, do_am_khong_khi, do_am_dat, muc_nuoc, anh_sang } =
-      req.body;
+    const {
+      nhiet_do,
+      do_am_khong_khi,
+      do_am_dat,
+      muc_nuoc,
+      anh_sang,
+      created_at,
+    } = req.body;
     const user_id = req.user.user_id;
     const sensorData = await addSensorDataService(
       nhiet_do,
@@ -18,7 +24,8 @@ router.post("/", authenticate, async (req, res) => {
       do_am_dat,
       muc_nuoc,
       anh_sang,
-      user_id
+      user_id,
+      created_at
     );
     res.json({
       code: 200,

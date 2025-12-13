@@ -261,10 +261,9 @@ BEGIN
 END;
 $$;
 
-CREATE OR REPLACE FUNCTION fnc_update_device_control(
+CREATE OR REPLACE FUNCTION fnc_update_mode(
     p_user_id INT,
-    p_mode VARCHAR,
-    p_pump_status VARCHAR
+    p_mode VARCHAR
 )
 RETURNS TABLE (
     user_id INT,
@@ -278,17 +277,59 @@ BEGIN
     UPDATE device_control
     SET 
         mode = p_mode,
+        updated_at = NOW()
+    WHERE user_id = p_user_id;
+
+	IF p_mode = 'AUTO' THEN
+    UPDATE device_control
+    SET pump_status = 'OFF'
+    WHERE user_id = p_user_id;
+END IF;
+
+
+    RETURN QUERY
+    SELECT user_id, mode, pump_status, updated_at
+    FROM device_control
+    WHERE user_id = p_user_id;
+END;
+$$;
+
+CREATE OR REPLACE FUNCTION fnc_update_pump_status(
+    p_user_id INT,
+    p_pump_status VARCHAR
+)
+RETURNS TABLE (
+    user_id INT,
+    mode VARCHAR,
+    pump_status VARCHAR,
+    updated_at TIMESTAMPTZ
+)
+LANGUAGE plpgsql AS
+$$
+DECLARE
+    v_mode VARCHAR;
+BEGIN
+    -- Lấy mode hiện tại
+    SELECT mode INTO v_mode
+    FROM device_control
+    WHERE user_id = p_user_id;
+
+    -- Nếu không phải manual thì báo lỗi
+    IF v_mode <> 'MANUAL' THEN
+        RAISE EXCEPTION 'Pump chỉ được điều khiển khi chế độ đang là MANUAL. Hiện tại mode = %', v_mode;
+    END IF;
+
+    -- Cập nhật pump
+    UPDATE device_control
+    SET 
         pump_status = p_pump_status,
         updated_at = NOW()
     WHERE user_id = p_user_id;
 
     RETURN QUERY
-    SELECT 
-        user_id,
-        mode,
-        pump_status,
-        updated_at
+    SELECT user_id, mode, pump_status, updated_at
     FROM device_control
     WHERE user_id = p_user_id;
 END;
 $$;
+
