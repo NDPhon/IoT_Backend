@@ -99,7 +99,7 @@ router.patch("/change-pump-status", authenticate, async (req, res) => {
 
     if (pump_status === 1) {
       await sendNotificationEmailService(
-        "vhminh23@clc.fitus.edu.vn",
+        "ndphon23@clc.fitus.edu.vn",
         "EcoSystem",
         `Hệ thống vừa tưới cây ở chế độ ${device.mode}`
       );

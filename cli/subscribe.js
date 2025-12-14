@@ -11,7 +11,6 @@ client.on("connect", () => {
   console.log("✅ Subscriber connected to MQTT");
 
   client.subscribe([
-    "iot/+/sensor",
     "plantcare/group7/temperature_humidity",
     "plantcare/group7/soil_light",
     "plantcare/group7/water_level",
@@ -53,14 +52,6 @@ client.on("message", (topic, message) => {
 
       latestSensorData.set("group7", group7Data);
       return;
-    }
-
-    /* =============================
-       USER SENSOR (iot/{id}/sensor)
-       ============================= */
-    if (topic.startsWith("iot/")) {
-      const { user_id } = payload;
-      latestSensorData.set(user_id, payload);
     }
   } catch (err) {
     console.error("❌ MQTT parse error:", err.message);

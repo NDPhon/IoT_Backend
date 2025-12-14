@@ -2,12 +2,7 @@ import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 
-import {
-  registerUser,
-  getUserById,
-  getUserByUsername,
-  loginUser,
-} from "../repo/userRepo.js";
+import { registerUser, getUserByUsername } from "../repo/userRepo.js";
 
 dotenv.config();
 
@@ -41,7 +36,7 @@ export const login = async (username, password) => {
 
   // Tạo JWT
   const token = jwt.sign(
-    { user_id: user.user_id, username: user.username, role: user.role },
+    { user_id: user.user_id, username: user.username },
     JWT_SECRET,
     { expiresIn: JWT_EXPIRES_IN }
   );
