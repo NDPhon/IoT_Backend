@@ -1,6 +1,7 @@
 select * from users
 select * from watering_history
-
+select * from system_config
+select * from device_control
 CREATE TABLE users (
     user_id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -8,7 +9,8 @@ CREATE TABLE users (
     is_created TIMESTAMPTZ DEFAULT NOW(),
     status BOOLEAN DEFAULT TRUE
 );
-
+select * from sensor_data
+delete  from sensor_data
 select * from users;
 
 CREATE TABLE sensor_data (

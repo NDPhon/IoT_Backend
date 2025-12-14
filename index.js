@@ -8,6 +8,7 @@ import sensorController from "./controllers/sensorController.js";
 import historyController from "./controllers/historyController.js";
 import deviceController from "./controllers/deviceController.js";
 import systemController from "./controllers/systemController.js";
+import emailController from "./controllers/emailController.js";
 
 dotenv.config();
 
@@ -26,6 +27,7 @@ app.use("/api/sensors", sensorController);
 app.use("/api/history", historyController);
 app.use("/api/device", deviceController);
 app.use("/api/system", systemController);
+app.use("/api/email", emailController);
 
 // Test route
 const PORT = process.env.BACKEND_PORT || 8000;

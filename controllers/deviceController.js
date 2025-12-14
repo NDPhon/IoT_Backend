@@ -3,6 +3,8 @@ import {
   changeDeviceModeService,
   changePumpStatusService,
 } from "../services/deviceService.js";
+import { sendNotificationEmailService } from "../services/emailService.js";
+import { sendPushNotificationService } from "../services/phoneNotiService.js";
 import express from "express";
 import { authenticate } from "../middlewares/auth.js";
 import { publishMode, publishPump } from "../cli/publisher.js";
@@ -93,7 +95,17 @@ router.patch("/change-pump-status", authenticate, async (req, res) => {
     const updatedDevice = await changePumpStatusService(user_id, pump_status);
 
     // Publish MQTT
-    publishPump(pump_status);
+    if (pump_status === 1) {
+      await sendNotificationEmailService(
+        "vhminh23@clc.fitus.edu.vn",
+        "EcoSystem",
+        `Hệ thống vừa tưới cây ở chế độ ${device.mode}`
+      );
+      await sendPushNotificationService(
+        "EcoSystem",
+        `Hệ thống vừa tưới cây ở chế độ ${device.mode}`
+      );
+    }
 
     res.json({
       code: 200,
