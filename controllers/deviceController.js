@@ -95,6 +95,8 @@ router.patch("/change-pump-status", authenticate, async (req, res) => {
     const updatedDevice = await changePumpStatusService(user_id, pump_status);
 
     // Publish MQTT
+    publishPump(pump_status);
+
     if (pump_status === 1) {
       await sendNotificationEmailService(
         "vhminh23@clc.fitus.edu.vn",

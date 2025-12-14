@@ -295,6 +295,12 @@ END IF;
 END;
 $$;
 drop function fnc_update_pump_status
+SELECT
+    proname AS function_name,
+    COUNT(*) AS total
+FROM pg_proc
+WHERE proname = 'fnc_update_pump_status'
+GROUP BY proname;
 CREATE OR REPLACE FUNCTION fnc_update_pump_status(
     p_user_id INT,
     p_pump_status VARCHAR
@@ -311,23 +317,28 @@ DECLARE
     v_mode VARCHAR;
 BEGIN
     -- Lấy mode hiện tại
-    SELECT mode INTO v_mode
-    FROM device_control
-    WHERE user_id = p_user_id;
+    SELECT dc.mode
+    INTO v_mode
+    FROM device_control AS dc
+    WHERE dc.user_id = p_user_id;
 
-
-
-    -- Cập nhật pump
-    UPDATE device_control
+    -- Cập nhật pump_status
+    UPDATE device_control AS dc
     SET 
         pump_status = p_pump_status,
         updated_at = NOW()
-    WHERE user_id = p_user_id;
+    WHERE dc.user_id = p_user_id;
 
+    -- Trả về dữ liệu sau khi update
     RETURN QUERY
-    SELECT user_id, mode, pump_status, updated_at
-    FROM device_control
-    WHERE user_id = p_user_id;
+    SELECT 
+        dc.user_id,
+        dc.mode,
+        dc.pump_status,
+        dc.updated_at
+    FROM device_control AS dc
+    WHERE dc.user_id = p_user_id;
 END;
 $$;
+
 
